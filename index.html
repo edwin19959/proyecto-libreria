@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Libros</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css"> <!-- Verifica esta ruta -->
+</head>
+<body>
+    <header class="bg-dark text-white text-center py-3">
+        <h1>Bienvenido a la Librería</h1>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="libros.php">Libros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="autores.php">Autores</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contacto.php">Contacto</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="container my-5">
+        <h2 class="mb-4">Listado de Libros</h2>
+        <div class="row">
+            <?php
+            include 'config.php';
+            try {
+                $stmt = $pdo->query('SELECT * FROM libros');
+                if ($stmt->rowCount() > 0) {
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        echo '<div class="col-md-4 mb-4">';
+                        echo '<div class="card">';
+                        
+                        echo '<div class="card-body">';
+                        echo '<h5 class="card-title">' . htmlspecialchars($row['titulo']) . '</h5>';
+                        echo '<p class="card-text">Autor: ' . htmlspecialchars($row['autor']) . '</p>';
+                        echo '<p class="card-text">Género: ' . htmlspecialchars($row['genero']) . '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                } else {
+                    echo '<p>No hay libros registrados.</p>';
+                }
+            } catch (PDOException $e) {
+                echo '<p>Error en la consulta: ' . htmlspecialchars($e->getMessage()) . '</p>';
+            }
+            ?>
+        </div>
+        <h2 class="mt-5">Deja tu comentario</h2>
+        <form action="guardar_comentario.php" method="post">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required placeholder="Tu Nombre">
+            </div>
+            <div class="form-group">
+                <label for="correo">Correo</label>
+                <input type="email" class="form-control" id="correo" name="correo" required placeholder="Tu Correo">
+            </div>
+            <div class="form-group">
+                <label for="comentario">Comentario</label>
+                <textarea class="form-control" id="comentario" name="comentario" rows="3" required placeholder="Tu Comentario"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+    </main>
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Librería. Todos los derechos reservados.</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="script.js"></script> <!-- Verifica esta ruta -->
+</body>
+</html>
